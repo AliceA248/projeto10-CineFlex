@@ -75,7 +75,7 @@ export default function SeatsPage() {
 
             <SeatsContainer>
                 {sessao.seats.map((seat) => ( 
-                    <SeatItem
+                    <SeatItem data-test="seat"
                     available ={seat.isAvailable}
                     selected = {selectedSeats.includes(seat)}
                     onClick ={() => SeatClick(seat)}
@@ -108,20 +108,20 @@ export default function SeatsPage() {
             <FormContainer>
                 <form onSubmit={handleSubmit}>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." 
+                <input data-test="client-name" placeholder="Digite seu nome..." 
                 required
                 value={name}
                 onChange={p => setName(p.target.value)}
                 />
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." 
+                <input data-test="client-cpf" placeholder="Digite seu CPF..." 
                 value={cpf}
                 onChange={p => setCpf(p.target.value)}
                 required
                 />
 
-                <button type="submit">Reservar Assento(s)</button>
+                <button data-test="book-seat-btn" type="submit">Reservar Assento(s)</button>
                 </form>
                 
             </FormContainer>
@@ -129,7 +129,7 @@ export default function SeatsPage() {
             
             <FooterContainer>
                 <div>
-                    <img src={sessao.movie.posterURL} />
+                    <img data-test="footer" src={sessao.movie.posterURL} />
                 </div>
                 <div>
                     <p>{sessao.movie.title}</p>
@@ -187,7 +187,7 @@ const CaptionContainer = styled.div`
     flex-direction: row;
     width: 300px;
     justify-content: space-between;
-    margin: 20px;
+    margin: 20px; 
 `
 const CaptionCircle = styled.div`
     border: 1px solid ${props => props.border};         

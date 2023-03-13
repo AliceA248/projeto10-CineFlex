@@ -27,13 +27,13 @@ export default function SessionsPage() {
                 {session.map((movie) => {
                     return (
                         <>
-                            <SessionContainer>
+                            <SessionContainer data-test="movie-day" >
                                 {movie.weekday} - {movie.date}
                                 <ButtonsContainer>
                                     {movie.showtimes.map((showtime) => {
                                         return (
                                             <Link to={`/assentos/${showtime.id}`}>
-                                                <button>{showtime.name}</button>
+                                                <button data-test="showtime" >{showtime.name}</button>
                                             </Link>
                                         )
                                     })}
@@ -44,9 +44,9 @@ export default function SessionsPage() {
                 })}
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer" >
                 <div>
-                    <img src={movie.posterURL} />
+                    <img data-test="footer" src={movie.posterURL} />
                 </div>
                 <div>
                     <p>{movie.title}</p>

@@ -6,37 +6,35 @@ import styled from "styled-components"
 import axios from "axios";
 
 export default function HomePage() {
-
-    const [movie, setMovie] = useState([]);
-
+    const [movies, setMovies] = useState([]);
+  
     useEffect(() => {
-        const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies`;
-        const promise = axios.get(url);
-        promise.then((answer) => {
-            setMovie(answer.data);
+      const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies`;
+      axios
+        .get(url)
+        .then((response) => {
+          setMovies(response.data);
         })
-        promise.catch((error) => {
-
-        })
-    }, [])
-
+        .catch((error) => {
+          console.error(error);
+        });
+    }, []);
+  
     return (
-        <PageContainer>
-            Selecione o filme
-            <ListContainer>
-            {movie.map((movie) => {
-                return (
-                        <Link to={`/sessoes/${movie.id}`}>
-                            <MovieContainer>
-                                <img src={movie.posterURL} />
-                            </MovieContainer>
-                        </Link>
-                   
-                )})}
-                 </ListContainer>
-        </PageContainer>
-    )
-}
+      <PageContainer>
+        Selecione o filme
+        <ListContainer>
+          {movies.map((movie) => (
+            <Link key={movie.id} to={`/sessoes/${movie.id}`}>
+              <MovieContainer data-test="movie" >
+                <img src={movie.posterURL} alt={movie.title} />
+              </MovieContainer>
+            </Link>
+          ))}
+        </ListContainer>
+      </PageContainer>
+    );
+  }
 
 const PageContainer = styled.div`
     display: flex;

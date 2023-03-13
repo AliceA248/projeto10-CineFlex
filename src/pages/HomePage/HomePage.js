@@ -15,8 +15,8 @@ export default function HomePage() {
         .then((response) => {
           setMovies(response.data);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((err) => {
+          console.err(err);
         });
     }, []);
   
@@ -27,7 +27,7 @@ export default function HomePage() {
           {movies.map((movie) => (
             <Link key={movie.id} to={`/sessoes/${movie.id}`}>
               <MovieContainer data-test="movie" >
-                <img src={movie.posterURL} alt={movie.title} />
+                <img src={movie.posterURL} />
               </MovieContainer>
             </Link>
           ))}

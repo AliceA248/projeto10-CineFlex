@@ -15,7 +15,7 @@ export default function SessionsPage() {
             setMovie(answer.data);
             setSession(answer.data.days);
         })
-        promise.catch((error) => {
+        promise.catch((err) => {
 
         })
     }, [])
@@ -44,7 +44,7 @@ export default function SessionsPage() {
                 })}
             </div>
 
-            <FooterContainer data-test="footer" >
+            <FooterContainer >
                 <div>
                     <img data-test="footer" src={movie.posterURL} />
                 </div>

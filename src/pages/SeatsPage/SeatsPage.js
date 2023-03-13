@@ -45,14 +45,14 @@ export default function SeatsPage() {
 
             const url = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many"
             
-            const reservaData ={
+            const reserve ={
                 ids: selectedSeats.map((seat) => seat.id),
                 name: name,
                 cpf: cpf
 
             }
 
-            const promise = axios.post(url, reservaData)
+            const promise = axios.post(url, reserve)
             promise.then(res => navigate("/sucesso", { 
                 state: { 
                 id: res.id,
@@ -71,7 +71,7 @@ export default function SeatsPage() {
 
     return (
         <PageContainer>
-            Selecione o(s) assento(s)
+            Selecione o(s) assento(s)!
 
             <SeatsContainer>
                 {sessao.seats.map((seat) => ( 

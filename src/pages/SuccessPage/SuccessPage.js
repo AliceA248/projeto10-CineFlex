@@ -24,11 +24,11 @@ export default function SucessPage() {
 
   return (
     <PageContainer>
-      <h1>Pedido feito com sucesso!</h1>
+      <h1>Pedido feito com sucesso!!</h1>
 
       <TextContainer data-test="movie-info">
         <strong>
-          <p>Filme e sessão</p>
+          Filme e sessão
         </strong>
         <p>{movieTitle}</p>
         <p>
@@ -38,7 +38,7 @@ export default function SucessPage() {
 
       <TextContainer data-test="seats-info">
         <strong>
-          <p>Ingressos</p>
+          Ingressos
         </strong>
         {selectedSeats.map((seat) => (
           <p key={seat.id}>Assento {seat.name}</p>
@@ -47,7 +47,7 @@ export default function SucessPage() {
 
       <TextContainer data-test="client-info">
         <strong>
-          <p>Comprador</p>
+          Comprador
         </strong>
         <p>Nome: {name}</p>
         <p>CPF: {cpf}</p>

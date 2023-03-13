@@ -1,51 +1,140 @@
 import styled from "styled-components"
+import { useParams, useLocation } from "react-router-dom"
+import { useEffect,useState } from "react"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 export default function SeatsPage() {
+    const[sessao,setSessao] = useState(undefined);
+    const [selectedSeats, SetselectedSeats] = useState([]);
+    const[name,setName] = useState("");
+    const[cpf,setCpf] = useState("");
+    const {idSessao} = useParams();
+    const location = useLocation()
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
+
+        const promise = axios.get(url)
+        promise.then(res => setSessao(res.data))
+        promise.catch(err => (err.response.data))
+    },[idSessao, location])
+        
+        if (sessao ===undefined){
+            return <div>Carregando...</div>
+        }
+
+        function SeatClick(seat) {
+            if (!seat.isAvailable) {
+              alert("Este assento está indisponível. Por favor, escolha outro.");
+              return;
+            }
+          
+            const newSelectedSeats = selectedSeats.includes(seat)
+              ? selectedSeats.filter((s) => s !== seat)
+              : [...selectedSeats, seat];
+          
+            SetselectedSeats(newSelectedSeats);
+          }
+          
+        function handleSubmit(p){
+            
+
+            p.preventDefault()
+            
+            const url = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many"
+            
+            const reservaData ={
+                ids: selectedSeats.map((seat) => seat.id),
+                name: name,
+                cpf: cpf
+
+            }
+
+            const promise = axios.post(url, reservaData)
+            promise.then(res => navigate("/sucesso", { 
+                state: { 
+                id: res.id,
+                selectedSeats: selectedSeats,
+                movieTitle: sessao.movie.title,
+                dayDate: sessao.day.date,
+                dayWeekday: sessao.day.weekday,
+                name: name,
+                cpf: cpf,
+                Hora: sessao.name
+            }}));
+            promise.catch(err => alert(err.response.data.mensagem)
+            
+       )}
+
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {sessao.seats.map((seat) => ( 
+                    <SeatItem
+                    available ={seat.isAvailable}
+                    selected = {selectedSeats.includes(seat)}
+                    onClick ={() => SeatClick(seat)}
+                    style = {{
+                        backgroundColor: seat.isAvailable ?
+                        selectedSeats.includes(seat) ? "#1AAE9E" : "#C3CFD9" : "#FBE192"
+                    }}
+                    >
+                    
+                    {seat.name}
+                    </SeatItem>))}
             </SeatsContainer>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#1AAE9E" border="0E7D71"/>
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#C3CFD9"border="7B8B99"/>
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#FBE192" border="F7C52B"/>
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
-
+            
+        
             <FormContainer>
+                <form onSubmit={handleSubmit}>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <input data-test="client-name" placeholder="Digite seu nome..." 
+                required
+                value={name}
+                onChange={p => setName(p.target.value)}
+                />
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <input placeholder="Digite seu CPF..." 
+                value={cpf}
+                onChange={p => setCpf(p.target.value)}
+                required
+                />
 
-                <button>Reservar Assento(s)</button>
+                <button type="submit">Reservar Assento(s)</button>
+                </form>
+                
             </FormContainer>
-
+           
+            
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={sessao.movie.posterURL} />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{sessao.movie.title}</p>
+                    <p>{sessao.day.weekday} - {sessao.name}</p>
                 </div>
             </FooterContainer>
 
@@ -74,13 +163,17 @@ const SeatsContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
 `
-const FormContainer = styled.div`
+const FormContainer = styled.label`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin: 20px 0;
     font-size: 18px;
+    form{ display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;}
     button {
         align-self: center;
     }
@@ -88,6 +181,7 @@ const FormContainer = styled.div`
         width: calc(100vw - 60px);
     }
 `
+
 const CaptionContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -96,8 +190,8 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid ${props => props.border};         
+    background-color: ${props => props.color};  
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -113,8 +207,8 @@ const CaptionItem = styled.div`
     font-size: 12px;
 `
 const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid #808F9D;
+    background-color: #C3CFD9; 
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -135,7 +229,6 @@ const FooterContainer = styled.div`
     font-size: 20px;
     position: fixed;
     bottom: 0;
-
     div:nth-child(1) {
         box-shadow: 0px 2px 4px 2px #0000001A;
         border-radius: 3px;
@@ -150,7 +243,6 @@ const FooterContainer = styled.div`
             padding: 8px;
         }
     }
-
     div:nth-child(2) {
         display: flex;
         flex-direction: column;

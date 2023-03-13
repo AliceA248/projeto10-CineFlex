@@ -1,6 +1,19 @@
+import axios from "axios"
+import { useEffect } from "react"
 import styled from "styled-components"
 
 export default function HomePage() {
+    const url = "https://mock-api.driven.com.br/api/v8/cineflex/movies"
+
+    useEffect(() => {
+        axios.get(url)
+        .then((res) => (res.data))
+        .catch((err) => (err.response.data))
+
+    }, []
+
+    )
+
     return (
         <PageContainer>
             Selecione o filme

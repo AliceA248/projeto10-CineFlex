@@ -1,38 +1,39 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components"
-import Carregando from "./img/Carregando.png"
+import axios from "axios";
 
 export default function HomePage() {
-    const [filmes, setFilmes] = useState(undefined)
-    const url = "https://mock-api.driven.com.br/api/v8/cineflex/movies"
+
+    const [movie, setMovie] = useState([]);
 
     useEffect(() => {
-        axios.get(url)
-            .then((res) => setFilmes(res.data))
-            .catch((err) => (err.response.data))
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies`;
+        const promise = axios.get(url);
+        promise.then((answer) => {
+            setMovie(answer.data);
+        })
+        promise.catch((error) => {
 
-    }, [url]
-
-    )
-
-    if (filmes === undefined) {
-        return <div className="Erro">
-            <img src={Carregando} />
-        </div>
-    }
+        })
+    }, [])
 
     return (
         <PageContainer>
             Selecione o filme
-
-            <ListContainer>
-                    {filmes.map((filme) => <MovieContainer> 
-                        <img src={filme.posterURL} />
-                        </MovieContainer>
-                    )}
-            </ListContainer>
-
+            <ListContainer key={movie.id}>
+            {movie.map((movie) => {
+                return (
+                        <Link to={`/sessoes/${movie.id}`}>
+                            <MovieContainer>
+                                <img src={movie.posterURL} alt={movie.title} />
+                            </MovieContainer>
+                        </Link>
+                   
+                )})}
+                 </ListContainer>
         </PageContainer>
     )
 }
@@ -67,5 +68,8 @@ const MovieContainer = styled.div`
     img {
         width: 130px;
         height: 190px;
+    }
+    img:hover {
+        cursor: pointer;
     }
 `

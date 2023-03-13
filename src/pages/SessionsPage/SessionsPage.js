@@ -1,42 +1,55 @@
 import styled from "styled-components"
+import axios from "axios";
+import { useParams, Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export default function SessionsPage() {
+    const [session, setSession] = useState([]);
+    const [movie, setMovie] = useState([]);
+    const { idFilme } = useParams();
+
+    useEffect(() => {
+        const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`);
+        promise.then((answer) => {
+            setMovie(answer.data);
+            setSession(answer.data.days);
+        })
+        promise.catch((error) => {
+
+        })
+    }, [])
 
     return (
         <PageContainer>
             Selecione o horário
             <div>
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
+                {session.map((movie) => {
+                    return (
+                        <>
+                            <SessionContainer key={movie.id}>
+                                {movie.weekday} - {movie.date}
+                                <ButtonsContainer>
+                                    {movie.showtimes.map((showtime) => {
+                                        return (
+                                            <Link to={`/assentos/${showtime.id}`} key={showtime.id}>
+                                                <button>{showtime.name}</button>
+                                            </Link>
+                                        )
+                                    })}
+                                </ButtonsContainer>
+                            </SessionContainer>
+                            </>
+                    )
+                })}
             </div>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={movie.posterURL} />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{movie.title}</p>
                 </div>
             </FooterContainer>
 
@@ -88,7 +101,6 @@ const FooterContainer = styled.div`
     font-size: 20px;
     position: fixed;
     bottom: 0;
-
     div:nth-child(1) {
         box-shadow: 0px 2px 4px 2px #0000001A;
         border-radius: 3px;
@@ -103,7 +115,6 @@ const FooterContainer = styled.div`
             padding: 8px;
         }
     }
-
     div:nth-child(2) {
         display: flex;
         flex-direction: column;

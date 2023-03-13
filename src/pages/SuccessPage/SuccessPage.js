@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
+import Carregando from "./img/Carregando.png"
 
 export default function SucessPage() {
   const location = useLocation();
@@ -21,6 +22,12 @@ export default function SucessPage() {
       setHora(location.state.Hora);
     }
   }, [location.state]);
+
+  if (selectedSeats ===undefined){
+    return <div>
+        <img src={Carregando} alt="Carregando"/>
+    </div>
+}
 
   return (
     <PageContainer>

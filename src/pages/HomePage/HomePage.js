@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import styled from "styled-components"
 import axios from "axios";
+import Carregando from "./img/Carregando.png"
 
 export default function HomePage() {
     const [movies, setMovies] = useState([]);
@@ -19,13 +20,19 @@ export default function HomePage() {
           console.err(err);
         });
     }, []);
+
+    if (movies ===undefined){
+        return <div>
+            <img src={Carregando} alt="Carregando"/>
+        </div>
+    }
   
     return (
       <PageContainer>
         Selecione o filme
         <ListContainer>
           {movies.map((movie) => (
-            <Link key={movie.id} to={`/sessoes/${movie.id}`}>
+            <Link to={`/sessoes/${movie.id}`}>
               <MovieContainer data-test="movie" >
                 <img src={movie.posterURL} />
               </MovieContainer>

@@ -3,6 +3,7 @@ import { useParams, useLocation } from "react-router-dom"
 import { useEffect,useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Carregando from "./img/Carregando.png"
 
 export default function SeatsPage() {
     const[sessao,setSessao] = useState(undefined);
@@ -23,7 +24,9 @@ export default function SeatsPage() {
     },[idSessao, location])
         
         if (sessao ===undefined){
-            return <div>Carregando...</div>
+            return <div>
+                <img src={Carregando} alt="Carregando"/>
+            </div>
         }
 
         function SeatClick(seat) {
@@ -127,7 +130,7 @@ export default function SeatsPage() {
             </FormContainer>
            
             
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img data-test="footer" src={sessao.movie.posterURL} />
                 </div>

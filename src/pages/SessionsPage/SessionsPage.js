@@ -3,6 +3,8 @@ import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
+import Carregando from "./img/Carregando.png"
+
 
 export default function SessionsPage() {
     const [session, setSession] = useState([]);
@@ -19,6 +21,12 @@ export default function SessionsPage() {
 
         })
     }, [])
+
+    if (session ===undefined){
+        return <div>
+            <img src={Carregando} alt="Carregando"/>
+        </div>
+    }
 
     return (
         <PageContainer>
@@ -44,9 +52,9 @@ export default function SessionsPage() {
                 })}
             </div>
 
-            <FooterContainer >
+            <FooterContainer data-test="footer" >
                 <div>
-                    <img data-test="footer" src={movie.posterURL} />
+                    <img  src={movie.posterURL} />
                 </div>
                 <div>
                     <p>{movie.title}</p>

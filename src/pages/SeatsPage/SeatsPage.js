@@ -41,9 +41,8 @@ export default function SeatsPage() {
           
         function handleSubmit(p){
             
-
             p.preventDefault()
-            
+
             const url = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many"
             
             const reservaData ={
@@ -109,7 +108,7 @@ export default function SeatsPage() {
             <FormContainer>
                 <form onSubmit={handleSubmit}>
                 Nome do Comprador:
-                <input data-test="client-name" placeholder="Digite seu nome..." 
+                <input placeholder="Digite seu nome..." 
                 required
                 value={name}
                 onChange={p => setName(p.target.value)}
@@ -176,6 +175,7 @@ const FormContainer = styled.label`
         width: 100%;}
     button {
         align-self: center;
+        cursor: pointer;
     }
     input {
         width: calc(100vw - 60px);
@@ -218,6 +218,7 @@ const SeatItem = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
+    cursor: pointer;
 `
 const FooterContainer = styled.div`
     width: 100%;

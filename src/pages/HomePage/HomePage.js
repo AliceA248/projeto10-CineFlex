@@ -23,12 +23,12 @@ export default function HomePage() {
     return (
         <PageContainer>
             Selecione o filme
-            <ListContainer key={movie.id}>
+            <ListContainer>
             {movie.map((movie) => {
                 return (
                         <Link to={`/sessoes/${movie.id}`}>
                             <MovieContainer>
-                                <img src={movie.posterURL} alt={movie.title} />
+                                <img src={movie.posterURL} />
                             </MovieContainer>
                         </Link>
                    
@@ -48,6 +48,7 @@ const PageContainer = styled.div`
     color: #293845;
     margin-top: 30px;
     padding-top: 70px;
+    
 `
 const ListContainer = styled.div`
     width: 330px;

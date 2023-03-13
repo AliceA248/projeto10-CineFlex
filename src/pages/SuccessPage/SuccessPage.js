@@ -1,34 +1,64 @@
-import styled from "styled-components"
+import { useState, useEffect } from "react";
+import { useLocation, Link } from "react-router-dom";
+import styled from "styled-components";
 
-export default function SuccessPage() {
+export default function SucessPage() {
+  const location = useLocation();
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [movieTitle, setMovieTitle] = useState("");
+  const [dayDate, setDayDate] = useState("");
+  const [name, setName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [Hora, setHora] = useState("");
 
-    return (
-        <PageContainer>
-            <h1>Pedido feito <br /> com sucesso!</h1>
+  useEffect(() => {
+    if (location.state) {
+      setSelectedSeats(location.state.selectedSeats);
+      setMovieTitle(location.state.movieTitle);
+      setDayDate(location.state.dayDate);
+      setName(location.state.name);
+      setCpf(location.state.cpf);
+      setHora(location.state.Hora);
+    }
+  }, [location.state]);
 
-            <TextContainer>
-                <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
-            </TextContainer>
+  return (
+    <PageContainer>
+      <h1>Pedido feito com sucesso!</h1>
 
-            <TextContainer>
-                <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
-            </TextContainer>
+      <TextContainer>
+        <strong>
+          <p>Filme e sessão</p>
+        </strong>
+        <p>{movieTitle}</p>
+        <p>
+          {Hora} - {dayDate}
+        </p>
+      </TextContainer>
 
-            <TextContainer>
-                <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
-            </TextContainer>
+      <TextContainer>
+        <strong>
+          <p>Ingressos</p>
+        </strong>
+        {selectedSeats.map((seat) => (
+          <p key={seat.id}>Assento {seat.name}</p>
+        ))}
+      </TextContainer>
 
-            <button>Voltar para Home</button>
-        </PageContainer>
-    )
+      <TextContainer>
+        <strong>
+          <p>Comprador</p>
+        </strong>
+        <p>Nome: {name}</p>
+        <p>CPF: {cpf}</p>
+      </TextContainer>
+      <Link to="/">
+        <button>Voltar para Home</button>
+      </Link>
+    </PageContainer>
+  );
 }
+
 
 const PageContainer = styled.div`
     display: flex;

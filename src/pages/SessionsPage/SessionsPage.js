@@ -27,12 +27,12 @@ export default function SessionsPage() {
                 {session.map((movie) => {
                     return (
                         <>
-                            <SessionContainer key={movie.id}>
+                            <SessionContainer>
                                 {movie.weekday} - {movie.date}
                                 <ButtonsContainer>
                                     {movie.showtimes.map((showtime) => {
                                         return (
-                                            <Link to={`/assentos/${showtime.id}`} key={showtime.id}>
+                                            <Link to={`/assentos/${showtime.id}`}>
                                                 <button>{showtime.name}</button>
                                             </Link>
                                         )
@@ -86,6 +86,7 @@ const ButtonsContainer = styled.div`
     margin: 20px 0;
     button {
         margin-right: 20px;
+        cursor: pointer;
     }
     a {
         text-decoration: none;
